@@ -1,4 +1,6 @@
 require 'pg'
+require 'securerandom'
+require 'bcrypt'
 
 module RpsGame
   # def self.create_db_connection()
@@ -88,3 +90,4 @@ module RpsGame
 end
 
 require_relative 'repos/users_repo'
+require_relative 'repos/matches_repo'
