@@ -3,6 +3,7 @@ require 'sinatra/base'
 require 'sinatra/reloader'
 require 'pry-byebug'
 require 'bcrypt'
+require 'json'
 
 set :bind, '0.0.0.0'
 
@@ -34,7 +35,7 @@ post '/signin' do
 	user_data = {}
 	user_data['username'] = params[:username]
 	user_data['password'] = params[:password]
-	RpsGame::UsersRepo.sign_in(@db, user_data).to_json
+	JSON.generate(RpsGame::UsersRepo.sign_in(@db, user_data))
 end
 
 post '/signup' do
@@ -42,7 +43,7 @@ post '/signup' do
 	user_data = {}
 	user_data['username'] = params[:username]
 	user_data['password'] = params[:password]
-	RpsGame::UsersRepo.sign_up(@db, user_data).to_json
+	JSON.generate(RpsGame::UsersRepo.sign_up(@db, user_data))
 
 end
 
@@ -51,5 +52,5 @@ post '/signout' do
 	user_data = {}
 	user_data['id'] = localStorage['user_id']
 	user_data['session_id'] = localStorage['session_id']
-	RpsGame::SessionsRepo.end_session(@db, user_data)
+	JSON.generate(RpsGame::SessionsRepo.end_session(@db, user_data))
 end
