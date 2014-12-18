@@ -6,6 +6,10 @@ describe RpsGame::UsersRepo do
     db.exec("SELECT COUNT(*) FROM users")[0]["count"].to_i
   end
 
+  def session_count(db)
+    db.exec("SELECT COUNT(*) FROM sessions")[0]["count"].to_i
+  end
+
   let(:db) { RpsGame.db('rps_test') }
   
   before(:each) do
@@ -34,5 +38,21 @@ describe RpsGame::UsersRepo do
   #   user = RpsGame::UsersRepo.sign_in(db, { 'username' => 'Alice'} )
   #   retrieved_user = RpsGame::UsersRepo.find(db, user['id'] )
 
+  it "signs up a user" do
+    expect(user_count(db)).to eq 0
+    expect(session_count(db)).to eq 0
+
+    user_data = {
+      'username' => 'Alice',
+      'password' => 'password123'
+    }
+
+    returned = RpsGame::UsersRepo.sign_up(db, user_data)
+
+    check = db.exec("SELECT * FROM sessions")
+
+    expect(returned).to eq check['session_id']
+
+  end
 
 end
