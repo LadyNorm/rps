@@ -1,53 +1,88 @@
 require 'pg'
-module RpsGame
-	def self.create_db_connection()
-		cstring = {
-  		host: "localhost",
-  		dbname: "rps_game",
-  		user: "ruby",
-  		password: "rubyRailsJS"
-		
-		}
 
-		PG.connect(cstring)
-	end
-	def self.clear_db(db)
-	    db.exec <<-SQL
-	      DELETE FROM users;
-	      /* TODO: Clear rest of the tables (books, etc.) */
-	    SQL
-	end
-		# NOTE: I am not indending the code you see here to actually be our final table structure. Just copying pasting what I had from my own attempt
-	def self.create_tables(db)
-	    db.exec <<-SQL	
-	      CREATE TABLE users(
-	        id SERIAL PRIMARY KEY,
-	        username VARCHAR,
-	        password VARCHAR,
-	        score INTEGER
-	        );
-	    SQL
-	    db.exec <<-SQL
-	      CREATE TABLE game(
-	        id SERIAL PRIMARY KEY,
-	        start_time INTEGER,
-	        end_time INTEGER,
-	        user_one_id INTEGER,
-	        user_two_id INTEGER,
-	        );
-	    SQL
-	    db.exec <<-SQL
-	     CREATE TABLE sessions(
-	     	id SERIAL PRIMARY KEY,
-	     	user_id REFERENCES user.id,
-	     	sessionKey VARCHAR
-	     	);
-		SQL
-	end
-	def self.drop_tables(db)
-	    db.exec <<-SQL
-	      DROP TABLE users;
-	      /* TODO: Drop rest of the tables (books, etc.) */
-	    SQL
-	end
+module RockPaperScissors
+  # def self.create_db_connection()
+  #   cstring = {
+  #     host: "localhost",
+  #     dbname: "rps_game",
+  #     user: "ruby",
+  #     password: "rubyRailsJS"
+    
+  #   }
+
+  #   PG.connect(string)
+  # end
+
+  def self.clear_tables
+    db.exec <<-SQL
+      DELETE FROM users;
+      DELETE FROM matches;
+      DELETE FROM sessions;
+      DELETE FROM games;
+    SQL
+  end
+
+  def self.db
+    PG.connect(host: 'localhost', dbname: 'rps_dev')
+  end
+
+  def self.create_tables
+    db.exec <<-SQL
+      CREATE TABLE IF NOT EXISTS users(
+        id SERIAL PRIMARY KEY,
+        username VARCHAR,
+        password VARCHAR,
+        score INTEGER
+        );
+      CREATE TABLE IF NOT EXISTS matches(
+        id SERIAL PRIMARY KEY,
+        hash VARCHAR,
+        player_one_id INTEGER REFERENCES users(id)
+          ON DELETE CASCADE
+          ON UPDATE CASCADE,
+        player_one_move VARCHAR,
+        player_two_id INTEGER REFERENCES users(id)
+          ON DELETE CASCADE
+          ON UPDATE CASCADE,
+        player_two_move VARCHAR,
+        winner INTEGER REFERENCES users(id)
+          ON DELETE CASCADE
+          ON UPDATE CASCADE
+        );
+      CREATE TABLE IF NOT EXISTS sessions(
+        id SERIAL PRIMARY KEY,
+        user_id INTEGER REFERENCES users(id)
+          ON DELETE CASCADE
+          ON UPDATE CASCADE,
+        session_id VARCHAR
+        );
+      CREATE TABLE IF NOT EXISTS games(
+        id SERIAL PRIMARY KEY,
+        player_one_id INTEGER REFERENCES users(id)
+          ON DELETE CASCADE
+          ON UPDATE CASCADE,
+        player_two_id INTEGER REFERENCES users(id)
+          ON DELETE CASCADE
+          ON UPDATE CASCADE,
+        winner INTEGER REFERENCES users(id)
+          ON DELETE CASCADE
+          ON UPDATE CASCADE
+        );
+    SQL
+  end
+
+  def self.drop_tables
+    db.exec <<-SQL
+      DROP TABLE games;
+      DROP TABLE matches;
+      DROP TABLE sessions;
+      DROP TABLE users;
+    SQL
+  end
+
+  def self.seed_tables
+    db.exec <<-SQL
+
+    SQL
+  end
 end
