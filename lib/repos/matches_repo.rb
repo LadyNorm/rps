@@ -31,7 +31,7 @@ module RpsGame
         
       db.exec('INSERT INTO matches (hash, player_one_id, player_one_move, player_two_id, player_two_move, winner) VALUES ($1, $2, $3, $4, $5, $6)', [game_info['game_hash'], game_info['player_one_id'], round_data['player_one_move'], game_info['player_two_id'], round_data['player_two_move'], winner])
 
-      RpsGame::MatchesRepo.scoredboard(db, game_info)
+      RpsGame::MatchesRepo.scoreboard(db, game_info)
 
       # {
       #   'game_hash' => game_info['game_hash'],
