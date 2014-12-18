@@ -71,7 +71,7 @@ function init()
 			if(footer)
 			{
 				$(".modal-footer").empty()
-				$(".modal-body").append(footer)
+				$(".modal-footer").append(footer)
 			}
 			else
 			{

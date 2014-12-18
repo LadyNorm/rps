@@ -37,7 +37,7 @@ post '/signin' do
 end
 
 post '/signup' do
-	db = RpsGame.create_db_connection('rps_db')
+	db = RpsGame.create_db_connection('rps_dev')
 	user_data = {}
 	user_data['username'] = params[:username]
 	user_data['password'] = params[:password]
