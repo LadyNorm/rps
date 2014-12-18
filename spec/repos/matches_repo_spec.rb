@@ -47,5 +47,29 @@ describe RpsGame::MatchesRepo do
     expect(game_info['player_two_id']).to eq @user_id_2
   end
 
+  it "gets all matches" do
+    expect(user_count(db)).to eq 2
+    game_info = RpsGame::MatchesRepo.create_game(db, @players_info)
+    game_hash = game_info['game_hash']
+    sql = %q[
+            INSERT INTO matches (hash, player_one_id, player_one_move, player_two_id, player_two_move, winner)
+            VALUES ($1, $2, $3, $4, $5, $6)
+    ]
+    db.exec(sql, [game_hash, @user_id_1, 'rock', @user_id_2, 'scissors', @user_id_1])
+
+        #     id SERIAL PRIMARY KEY,
+        # hash VARCHAR,
+        # player_one_id INTEGER REFERENCES users(id)
+        #   ON DELETE CASCADE
+        #   ON UPDATE CASCADE,
+        # player_one_move VARCHAR,
+        # player_two_id INTEGER REFERENCES users(id)
+        #   ON DELETE CASCADE
+        #   ON UPDATE CASCADE,
+        # player_two_move VARCHAR,
+        # winner VARCHAR
+
+  end
+
   
 end
