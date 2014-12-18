@@ -154,8 +154,8 @@ function signin()
 		  		{
 		  			console.log(response)
 				  	console.log("Signed In", response)
-				  	ctrl.apiToken = response
-				  	localStorage.setItem("apiToken", ctrl.apiToken)
+				  	ctrl.sessionId = response
+				  	localStorage.setItem("sessionId", ctrl.sessionId)
 				  	view.closeModal()
 				  	startSession()
 				}
@@ -212,9 +212,9 @@ function signup()
 		  		else
 		  		{
 		  			console.log(response)
-				  	console.log("Signed Up", response["apiToken"])
-				  	ctrl.apiToken = response
-				  	localStorage.setItem("apiToken", ctrl.apiToken)
+				  	console.log("Signed Up", response["sessionId"])
+				  	ctrl.sessionId = response
+				  	localStorage.setItem("sessionId", ctrl.sessionId)
 				  	view.closeModal()
 				  	startSession()
 				}
@@ -225,5 +225,8 @@ function signup()
 function startSession()
 {
 	$('#splash').hide('fade')
+	$('#main').append($("<div>").addClass('container').append($("<div>").addClass('row').append($("<div>").addClass('col-md-4'))).css('background-color', "FFFFFF"))
+
+
 }
 	
