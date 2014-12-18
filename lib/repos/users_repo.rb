@@ -9,6 +9,15 @@ module RpsGame
       db.exec('SELECT id FROM users WHERE username = $1', [username]).first['id']
     end
 
+    def self.online_users(db)
+      db.exec <<-SQL
+        SELECT u.username, u.score
+        FROM users u
+        JOIN sessions s
+        ON s.user_id = u.id
+      SQL
+    end
+
     def self.sign_in(db, user_data)
       #
       user_return = db.exec('SELECT id, password FROM users WHERE username = $1', [user_data['username']]).first
