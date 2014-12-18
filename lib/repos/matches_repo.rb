@@ -49,7 +49,7 @@ module RpsGame
         RpsGame::GamesRepo.save(db, {
           'player_one_id' => game_info['player_one_id'],
           'player_two_id' => game_info['player_two_id'],
-          'score' => '#{player_one_score} - #{player_two_score}',
+          'score' => "#{player_one_score} - #{player_two_score}",
           'winner' => player_one_score == 3 ? game_info['player_one_id'] : game_info['player_two_id']
           })
         db.exec('DELETE FROM matches WHERE hash = $1', [game_info['game_hash']])
