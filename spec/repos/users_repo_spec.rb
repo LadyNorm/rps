@@ -10,28 +10,28 @@ describe RpsGame::UsersRepo do
     db.exec("SELECT COUNT(*) FROM sessions")[0]["count"].to_i
   end
 
-  let(:db) { RpsGame.db('rps_test') }
+  let(:db) { RpsGame.create_db_connection('rps_test') }
   
   before(:each) do
     RpsGame.clear_tables(db)
   end
 
   it "gets all users" do
-    db.exec("INSERT INTO users (name, password, score) VALUES ($1, $2, $3)", ["Alice", "password_1", 4])
-    db.exec("INSERT INTO users (name, password, score) VALUES ($1, $2, $3)", ["Bob", "password_2", -2])
+    db.exec("INSERT INTO users (username, password, score) VALUES ($1, $2, $3)", ["Alice", "password_1", 4])
+    db.exec("INSERT INTO users (username, password, score) VALUES ($1, $2, $3)", ["Bob", "password_2", -2])
 
-    users = RpsGame::UsersRepo.all(db)
+    users = RpsGame::UsersRepo.all(db).entries
     expect(users).to be_a Array
-    exepect(users.count).to eq 2
+    expect(users.count).to eq 2
 
     usernames = users.map { |u| u['username'] }
     expect(usernames).to include "Alice", "Bob"
     
     passwords = users.map { |u| u['password'] }
-    exepect(passwords).to include "password_1", "password_2"
+    expect(passwords).to include "password_1", "password_2"
     
     scores = users.map { |u| u['score'] }
-    expect(scores).to include 4, -2 
+    expect(scores).to include "4", "-2" 
   end
 
   # xit "finds a user" do
@@ -48,11 +48,63 @@ describe RpsGame::UsersRepo do
     }
 
     returned = RpsGame::UsersRepo.sign_up(db, user_data)
-
-    check = db.exec("SELECT * FROM sessions")
-
+    check = db.exec("SELECT * FROM sessions").entries.first
     expect(returned).to eq check['session_id']
 
+    expect(user_count(db)).to eq 1
+    expect(session_count(db)).to eq 1
   end
+
+  it "raises an error if you sign up with an exisiting username" do 
+    user_data_1 = {
+      'username' => 'Alice',
+      'password' => 'password123'
+    }
+
+    RpsGame::UsersRepo.sign_up(db, user_data_1)
+
+  # it "Raises an error if both numbers are not integers" do
+  #   expect{Exercises.ex11('NaN', nil)}.to raise_error
+  # end
+
+    user_data_2 = {
+      'username' => 'Alice',
+      'password' => 'password123'
+    }
+
+    expect{ RpsGame::UserRepo.sign_up(db, user_data_2) }.to raise_error
+
+  end
+
+  it "signs in a user, also testing signout" do
+    expect(user_count(db)).to eq 0
+    expect(session_count(db)).to eq 0
+
+    user_data = {
+      'username' => 'Alice',
+      'password' => 'password123'
+    }
+
+    returned = RpsGame::UsersRepo.sign_up(db, user_data)
+    expect(user_count(db)).to eq 1
+    expect(session_count(db)).to eq 1
+
+    RpsGame::UsersRepo.sign_out(db, user_data)
+    expect(user_count(db)).to eq 1
+    expect(session_count(db)).to eq 0
+
+    returned = RpsGame::UsersRepo.sign_in(db, user_data)
+    check = db.exec("SELECT * FROM sessions").entries.first
+    expect(returned).to eq check['session_id']
+
+    expect(user_count(db)).to eq 1
+    expect(session_count(db)).to eq 1
+
+  end
+
+  xit "signs out a user" do 
+
+  end
+
 
 end
