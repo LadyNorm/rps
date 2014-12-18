@@ -34,7 +34,7 @@ post '/signin' do
 	user_data = {}
 	user_data['username'] = params[:username]
 	user_data['password'] = params[:password]
-	RpsGame::UsersRepo.sign_in(@db, user_data)
+	RpsGame::UsersRepo.sign_in(@db, user_data).to_json
 end
 
 post '/signup' do
@@ -42,7 +42,7 @@ post '/signup' do
 	user_data = {}
 	user_data['username'] = params[:username]
 	user_data['password'] = params[:password]
-	RpsGame::UsersRepo.sign_up(@db, user_data)
+	RpsGame::UsersRepo.sign_up(@db, user_data).to_json
 
 end
 
