@@ -1,12 +1,14 @@
-require 'securerandom'
-require 'BCrypt'
-
 module RpsGame
   class UsersRepo
     def self.all(db)
       #
       db.exec('SELECT * FROM users')
     end
+
+    def self.get_id(db, username)
+      db.exec('SELECT id FROM users WHERE username = $1', [username])
+    end
+
     def self.sign_in(db, user_data)
       #
       user_return = db.exec('SELECT id, password FROM users WHERE username = $1', [user_data['username']]).first
