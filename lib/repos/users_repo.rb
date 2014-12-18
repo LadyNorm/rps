@@ -14,17 +14,10 @@ module RpsGame
       user_return = db.exec('SELECT id, password FROM users WHERE username = $1', [user_data['username']]).first
       db_password = BCrypt::Password.new(user_return['password'])
       if db_password == user_data['password']
-        session_id = SecureRandom.hex(16)
-        db.exec('INSERT INTO sessions (user_id, session_id) VALUES ($1, $2)', [user_return['id'], session_id])
-        session_id
+        RpsGame::SessionsRepo.create_session(db, user_return['id'])
       else
         return false
       end
-    end
-
-    def self.sign_out(db, user_data)
-      #
-      db.exec('DELETE FROM sessions WHERE user_id = $1 AND session_id = $2', [user_data['id'], user_data['session_id']])
     end
 
     def self.sign_up(db, user_data)
@@ -33,9 +26,7 @@ module RpsGame
       if check.nil?
         crypted_pw = BCrypt::Password.create(user_data['password'])
         user_id = db.exec('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id', [user_data['username'], crypted_pw]).first
-        session_id = SecureRandom.hex(16)
-        db.exec('INSERT INTO sessions (user_id, session_id) VALUES ($1, $2)', [user_id['id'], session_id])
-        session_id
+        RpsGame::SessionsRepo.create_session(db, user_id['id'])
       else
         raise "Username already exists"
       end
