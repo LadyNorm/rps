@@ -54,3 +54,7 @@ post '/signout' do
 	user_data['session_id'] = localStorage['session_id']
 	JSON.generate(RpsGame::SessionsRepo.end_session(@db, user_data))
 end
+
+get '/online' do
+	JSON.generate(RpsGame::UsersRepo.online_users(@db).to_a)
+end
