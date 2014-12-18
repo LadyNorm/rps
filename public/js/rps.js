@@ -210,9 +210,9 @@ function signup()
 		  		else
 		  		{
 		  			console.log(response)
-				  	console.log("Signed Up", response["apiToken"])
-				  	ctrl.apiToken = response["apiToken"]
-				  	localStorage.setItem("apiToken", ctrl.apiToken)
+				  	console.log("Signed Up", response["sessionId"])
+				  	ctrl.sessionId = response["sessionId"]
+				  	localStorage.setItem("sessionId", ctrl.sessionId)
 				}
 			})
 	})
