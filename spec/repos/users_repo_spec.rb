@@ -76,7 +76,7 @@ describe RpsGame::UsersRepo do
 
   end
 
-  it "signs in a user, also testing signout" do
+  it "signs up a user, also testing signout/in" do
     expect(user_count(db)).to eq 0
     expect(session_count(db)).to eq 0
 
@@ -92,7 +92,7 @@ describe RpsGame::UsersRepo do
     user_id = RpsGame::UsersRepo.get_id(db, user_data['username'])
 
     user_data_2 = {
-      'user_id' => user_id,
+      'id' => user_id,
       'session_id' => returned_1
     }
 
@@ -109,9 +109,7 @@ describe RpsGame::UsersRepo do
 
   end
 
-  xit "signs out a user" do 
 
-  end
 
 
 end
