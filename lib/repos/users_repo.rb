@@ -16,6 +16,7 @@ module RpsGame
         JOIN sessions s
         ON s.user_id = u.id
       SQL
+    end
 
     def self.sign_in(db, user_data)
       #
