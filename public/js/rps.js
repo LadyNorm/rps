@@ -105,12 +105,22 @@ function signin()
 
 	signinForm = $("<form>")
 	fields = ['username', 'passowrd']
-	$('<label>').text('Username:')
+	$.each(fields, function(i, v){
+		$label = $('<label>')
+		$input = $('<input>')
+		$input.attr('id', v)
+		$label.attr('for', v)
+		$input.attr('name', v)
+		$label.text(v.charAt(0).toUpperCase() + v.slice(1))
+		$(signinForm).append($label)
+		$(signinForm).append($input)
+		$(signinForm).append($('<br>'))
 
-	view.closeModal()
-	view.modal("Login")
+	})
 
-
+	submit = view.buttons.template({type:'primary', iconName:'user', text:'Sign-In'})
+	//view.closeModal()
+	view.modal("Login", signinForm, true, submit)
 
 }
 
