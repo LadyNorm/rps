@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'pry-byebug'
 
 describe RpsGame::UsersRepo do
 
@@ -47,7 +48,7 @@ describe RpsGame::UsersRepo do
       'password' => 'password123'
     }
 
-    returned = RpsGame::UsersRepo.sign_up(db, user_data)
+    returned = RpsGame::UsersRepo.sign_up(db, user_data)['session_id']
     check = db.exec("SELECT * FROM sessions").entries.first
     expect(returned).to eq check['session_id']
 
@@ -77,6 +78,9 @@ describe RpsGame::UsersRepo do
   end
 
   it "signs up a user, also testing signout/in" do
+
+    # binding.pry
+
     expect(user_count(db)).to eq 0
     expect(session_count(db)).to eq 0
 
@@ -85,7 +89,7 @@ describe RpsGame::UsersRepo do
       'password' => 'password123'
     }
 
-    returned_1 = RpsGame::UsersRepo.sign_up(db, user_data)
+    returned_1 = RpsGame::UsersRepo.sign_up(db, user_data)["session_id"]
     expect(user_count(db)).to eq 1
     expect(session_count(db)).to eq 1
 
@@ -100,7 +104,7 @@ describe RpsGame::UsersRepo do
     expect(user_count(db)).to eq 1
     expect(session_count(db)).to eq 0
 
-    returned_2 = RpsGame::UsersRepo.sign_in(db, user_data)
+    returned_2 = RpsGame::UsersRepo.sign_in(db, user_data)["session_id"]
     check = db.exec("SELECT * FROM sessions").entries.first
     expect(returned_2).to eq check['session_id']
 
