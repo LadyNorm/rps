@@ -176,6 +176,8 @@ function signup()
 	$.each(fields, function(i, v){
 		$label = $('<label>')
 		$input = $('<input>')
+		if(v == 'password')
+			$input.attr('type',v)
 		$input.attr('id', v)
 		$label.attr('for', v)
 		$input.attr('name', v)
