@@ -50,7 +50,7 @@ function init()
 		//$('#title').css('font-family': 'PT Sans Caption', 'sans-serif')
 		$('.title').css('background-color','#195E19')
 		$('body').css('background-color','#195E19')+
-		$('.title').css('color','#FFFFA3')
+		$('.title').css('color','#FFD700')
 
 
 		
