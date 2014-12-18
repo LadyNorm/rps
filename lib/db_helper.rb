@@ -1,6 +1,6 @@
 require 'pg'
 
-module RockPaperScissors
+module RpsGame
   # def self.create_db_connection()
   #   cstring = {
   #     host: "localhost",
@@ -13,7 +13,7 @@ module RockPaperScissors
   #   PG.connect(string)
   # end
 
-  def self.clear_tables
+  def self.clear_tables(db)
     db.exec <<-SQL
       DELETE FROM users;
       DELETE FROM matches;
@@ -22,11 +22,11 @@ module RockPaperScissors
     SQL
   end
 
-  def self.db
-    PG.connect(host: 'localhost', dbname: 'rps_dev')
+  def self.create_db_connection(dbname)
+    PG.connect(host: 'localhost', dbname: dbname)
   end
 
-  def self.create_tables
+  def self.create_tables(db)
     db.exec <<-SQL
       CREATE TABLE IF NOT EXISTS users(
         id SERIAL PRIMARY KEY,
@@ -71,7 +71,7 @@ module RockPaperScissors
     SQL
   end
 
-  def self.drop_tables
+  def self.drop_tables(db)
     db.exec <<-SQL
       DROP TABLE games;
       DROP TABLE matches;
@@ -80,7 +80,7 @@ module RockPaperScissors
     SQL
   end
 
-  def self.seed_tables
+  def self.seed_tables(db)
     db.exec <<-SQL
 
     SQL
