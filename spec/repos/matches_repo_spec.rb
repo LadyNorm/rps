@@ -12,5 +12,9 @@ describe RpsGame::MatchesRepo do
     RpsGame.clear_tables(db)
   end
 
+  xit "gets all matches" do
+
+  end
+
   
 end
