@@ -40,5 +40,13 @@ module RpsGame
         raise "Username already exists"
       end
     end
+
+    def self.standings(db)
+      db.exec <<-SQL
+        SELECT username, score
+        FROM users
+        ORDER BY score DESC
+      SQL
+    end
   end
 end
