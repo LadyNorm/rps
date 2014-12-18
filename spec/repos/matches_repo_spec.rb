@@ -99,5 +99,17 @@ describe RpsGame::MatchesRepo do
     result = RpsGame::MatchesRepo.scoreboard(db, game_info)
     expect(result['player_one_score']).to eq 2
     expect(result['player_two_score']).to eq 0
+
+    round_data_4 = {
+      'player_one_move' => 'paper',
+      'player_two_move' => 'rock'
+    }
+    RpsGame::MatchesRepo.player_move(db, game_info, round_data_4)
+    RpsGame::MatchesRepo.scoreboard(db, game_info)
+
+    game_result = db.exec("SELECT * FROM games").entries.first
+
+    expect(game_result['winner']).to eq @user_id_1.to_s
+    expect(match_count(db)).to eq 0
   end
 end
