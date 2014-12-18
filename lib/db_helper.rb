@@ -47,9 +47,7 @@ module RpsGame
           ON DELETE CASCADE
           ON UPDATE CASCADE,
         player_two_move VARCHAR,
-        winner INTEGER REFERENCES users(id)
-          ON DELETE CASCADE
-          ON UPDATE CASCADE
+        winner VARCHAR
         );
       CREATE TABLE IF NOT EXISTS sessions(
         id SERIAL PRIMARY KEY,
