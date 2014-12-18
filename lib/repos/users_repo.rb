@@ -11,7 +11,7 @@ module RpsGame
 
     def self.online_users(db)
       db.exec <<-SQL
-        SELECT u.username, u.score
+        SELECT DISTINCT(u.username), u.score, u.id
         FROM users u
         JOIN sessions s
         ON s.user_id = u.id

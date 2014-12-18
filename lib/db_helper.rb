@@ -64,6 +64,7 @@ module RpsGame
         player_two_id INTEGER REFERENCES users(id)
           ON DELETE CASCADE
           ON UPDATE CASCADE,
+        score VARCHAR,
         winner VARCHAR
         );
     SQL
@@ -88,3 +89,4 @@ end
 require_relative 'repos/users_repo'
 require_relative 'repos/matches_repo'
 require_relative 'repos/sessions_repo'
+#require_relative 'repos/games_repo'

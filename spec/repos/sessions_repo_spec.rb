@@ -14,6 +14,7 @@ describe RpsGame::SessionsRepo do
   end
 
   it "creates a session and deletes session" do
+    # binding.pry
     expect(session_count(db)).to eq 0
 
     user_data_1 = {
@@ -31,15 +32,17 @@ describe RpsGame::SessionsRepo do
     # binding.pry
 
 
-    session_id = RpsGame::SessionsRepo.create_session(db, user_id)
+    user_data_pre = RpsGame::SessionsRepo.create_session(db, user_id)
+    # binding.pry
     expect(session_count(db)).to eq 1
 
     user_data_2 = {
-      'id' => user_id,
-      'session_id' => session_id
+      'id' => user_data_pre["user_id"],
+      'session_id' => user_data_pre["session_id"]
     }
 
     RpsGame::SessionsRepo.end_session(db, user_data_2)
+    # binding.pry
     expect(session_count(db)).to eq 0
   end
 
