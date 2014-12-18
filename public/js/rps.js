@@ -3,6 +3,15 @@ view.buttons = {}
 view.dialog = {}
 function init()
 {
+		view.title = $('<h1>')
+		$(view.title).text("Rock, Paper, Scissors - Green Monkeys' Edition")
+		view.buttons.template = _.template('<button type="button" class="btn btn-lg btn-<%= type %> glyphicon glyphicon-<%= iconName %>" id="<%= text %>"><%= text %></button>')
+		//$('#main').css('background-image','url("/img/splash.png")')
+		$('#header').height('50px')
+		$('#main').height('80%')
+		//$('#header').css('background-color','#228E6A')
+		$('body').css('background-color','#228E6A')
+		//$('#header').css('color','#FFC50C')
 		
 		splashImage = $('<canvas>')
 		$(splashImage).width('100%')
@@ -39,9 +48,9 @@ function init()
 
 		$('.title').height('50px')
 		//$('#title').css('font-family': 'PT Sans Caption', 'sans-serif')
-		$('.title').css('background-color','#275927')
-		$('body').css('background-color','#275927')+
-		$('.title').css('color','#FFD700')
+		$('.title').css('background-color','#195E19')
+		$('body').css('background-color','#195E19')+
+		$('.title').css('color','#FFFFA3')
 
 
 		
@@ -86,18 +95,20 @@ function init()
 
 		view.modal('Welcome!', buttons, true)
 		$('#Sign-In').css('margin-right','4px')
+		$('#Sign-In').click(signin)
+		$('#Sign-Up').click(signup)
 
 }
 
-function login()
+function signin()
 {
-	view.closeModal
-	//view.modal("Login")
 
+	signinForm = $("<form>")
+	fields = ['username', 'passowrd']
+	$('<label>').text('Username:')
 
-
-
-
+	view.closeModal()
+	view.modal("Login")
 
 
 
@@ -105,7 +116,8 @@ function login()
 
 function signup()
 {
-	view.closeModal
+	signupForm = $("<form>")
+	view.closeModal()
 
 
 
