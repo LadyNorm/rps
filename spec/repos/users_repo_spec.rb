@@ -85,17 +85,24 @@ describe RpsGame::UsersRepo do
       'password' => 'password123'
     }
 
-    returned = RpsGame::UsersRepo.sign_up(db, user_data)
+    returned_1 = RpsGame::UsersRepo.sign_up(db, user_data)
     expect(user_count(db)).to eq 1
     expect(session_count(db)).to eq 1
 
-    RpsGame::UsersRepo.sign_out(db, user_data)
+    user_id = RpsGame::UsersRepo.get_id(db, user_data['username'])
+
+    user_data_2 = {
+      'user_id' => user_id,
+      'session_id' => returned_1
+    }
+
+    RpsGame::UsersRepo.sign_out(db, user_data_2)
     expect(user_count(db)).to eq 1
     expect(session_count(db)).to eq 0
 
-    returned = RpsGame::UsersRepo.sign_in(db, user_data)
+    returned_2 = RpsGame::UsersRepo.sign_in(db, user_data)
     check = db.exec("SELECT * FROM sessions").entries.first
-    expect(returned).to eq check['session_id']
+    expect(returned_2).to eq check['session_id']
 
     expect(user_count(db)).to eq 1
     expect(session_count(db)).to eq 1
