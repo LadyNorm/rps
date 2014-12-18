@@ -106,7 +106,11 @@ describe RpsGame::MatchesRepo do
     }
     RpsGame::MatchesRepo.player_move(db, game_info, round_data_4)
 
-    result = RpsGame::MatchesRepo.scoreboard(db, game_info)
+    game_result = db.exec("SELECT * FROM games").entries
+
+    result = RpsGame::MatchesRepo.scoreboard(db, game_info).entries
+
+    binding.pry
     expect(result['player_one_score']).to eq 3
     expect(result['player_two_score']).to eq 0
   end
