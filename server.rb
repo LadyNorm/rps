@@ -4,6 +4,8 @@ require 'sinatra/reloader'
 require 'pry-byebug'
 require 'bcrypt'
 
+set :bind, '0.0.0.0'
+
 #'lib/repos/user_repo.rb', 'lib/repos/game_repo.rb'
 lib_files = ['lib/db_helper.rb']
 
