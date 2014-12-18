@@ -86,3 +86,5 @@ module RpsGame
     SQL
   end
 end
+
+require_relative 'repos/users_repo'
