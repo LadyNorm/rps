@@ -43,6 +43,7 @@ post '/signup' do
 	user_data['username'] = params[:username]
 	user_data['password'] = params[:password]
 	RpsGame::UsersRepo.sign_up(@db, user_data)
+
 end
 
 post '/signout' do
