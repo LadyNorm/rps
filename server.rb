@@ -38,8 +38,7 @@ end
 
 post '/signup' do
 	db = RpsGame.create_db_connection('rps_dev')
-	user_data = {}
-	user_data['username'] = params[:username]
-	user_data['password'] = params[:password]
+	user_data = {"username" => params[:username], 
+				'password' => params[:password]}
 	RpsGame::UsersRepo.sign_up(db, user_data)
 end

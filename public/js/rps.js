@@ -153,7 +153,7 @@ function signin()
 			$.ajax({
 			  type: 'POST',
 			  url: '/signin',
-			  data:fields
+			  data:data
 			}).success(function(response) {
 				console.log(response)
 				if(response["error"])
@@ -161,9 +161,11 @@ function signin()
 		  		else
 		  		{
 		  			console.log(response)
-				  	console.log("Signed In", response["apiToken"])
-				  	ctrl.apiToken = response["apiToken"]
+				  	console.log("Signed In", response)
+				  	ctrl.apiToken = response
 				  	localStorage.setItem("apiToken", ctrl.apiToken)
+				  	view.closeModal()
+				  	startSession()
 				}
 			})
 	})
@@ -210,7 +212,7 @@ function signup()
 			$.ajax({
 			  type: 'POST',
 			  url: '/signup',
-			  data:fields
+			  data:data
 			}).success(function(response) {
 				console.log(response)
 				if(response["error"])
@@ -219,10 +221,17 @@ function signup()
 		  		{
 		  			console.log(response)
 				  	console.log("Signed Up", response["apiToken"])
-				  	ctrl.apiToken = response["apiToken"]
+				  	ctrl.apiToken = response
 				  	localStorage.setItem("apiToken", ctrl.apiToken)
+				  	view.closeModal()
+				  	startSession()
 				}
 			})
 	})
+}
+
+function startSession()
+{
+	$('#splash').hide('fade')
 }
 	
