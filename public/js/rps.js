@@ -174,12 +174,6 @@ function signup()
 		$label.attr('')
 	}
 
-	view.closeModal()
 
-
-
-
-
-
-	
+)
 }	
