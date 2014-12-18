@@ -153,9 +153,11 @@ function signin()
 		  		else
 		  		{
 		  			console.log(response)
-				  	console.log("Signed In", response)
-				  	ctrl.sessionId = response
+				  	console.log("Signed In", response["sessionId"])
+				  	ctrl.sessionId = response["sessionId"]
+				  	ctrl.userId = response["user_id"]
 				  	localStorage.setItem("sessionId", ctrl.sessionId)
+				  	localStorage.setItem("userId", ctrl.userId)
 				  	view.closeModal()
 				  	startSession()
 				}
@@ -213,8 +215,10 @@ function signup()
 		  		{
 		  			console.log(response)
 				  	console.log("Signed Up", response["sessionId"])
-				  	ctrl.sessionId = response
+				  	ctrl.sessionId = response["sessionId"]
+				  	ctrl.userId = response["user_id"]
 				  	localStorage.setItem("sessionId", ctrl.sessionId)
+				  	localStorage.setItem("userId", ctrl.userId)
 				  	view.closeModal()
 				  	startSession()
 				}
@@ -224,9 +228,25 @@ function signup()
 
 function startSession()
 {
+
+	players = [{name:"name1", score:'3'}, {name:"name2", score:'3'}, {name:"name3", score:'3'}]
+
+	$('center').remove()
 	$('#splash').hide('fade')
-	$('#main').append($("<div>").addClass('container').append($("<div>").addClass('row').append($("<div>").addClass('col-md-4'))).css('background-color', "FFFFFF"))
+	onlinePlayers = $('<div>').attr('id', 'onlinePlayers')
+	$table = $('<table>')
 
+	$name = $('<th>').text('Name')
+	$score = $('<th>').text('Score')
+	$($table).addClass('table').append($('<thead>').append($name).append($score))
 
+	$.each(players, function(i,v){
+		$table.append($('<tr>').append($('<td>').text(v['name'])).append($('<td>').text(v['score'])))
+
+	})
+	$(onlinePlayers).append($("<div>").addClass('container').width(300).append($("<div>").addClass('row').append($("<div>").addClass('col-md-4').attr('id','tableHolder'))).css('background-color', "FFFFFF"))
+	$('#main').append(onlinePlayers)
+	$("#tableHolder").append($table)
+	$(onlinePlayers).css('float', 'right')
 }
 	
