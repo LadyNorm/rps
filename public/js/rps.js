@@ -4,15 +4,6 @@ view.buttons = {}
 view.dialog = {}
 function init()
 {
-		view.title = $('<h1>')
-		$(view.title).text("Rock, Paper, Scissors - Green Monkeys' Edition")
-		view.buttons.template = _.template('<button type="button" class="btn btn-lg btn-<%= type %> glyphicon glyphicon-<%= iconName %>" id="<%= text %>"><%= text %></button>')
-		//$('#main').css('background-image','url("/img/splash.png")')
-		$('#header').height('50px')
-		$('#main').height('80%')
-		//$('#header').css('background-color','#228E6A')
-		$('body').css('background-color','#228E6A')
-		//$('#header').css('color','#FFC50C')
 		
 		splashImage = $('<canvas>')
 		$(splashImage).width('100%')
@@ -43,14 +34,15 @@ function init()
         img.src = 'img/splash.png';
 
 		console.log('test')
+
 		view.title = $('#title')
 		//$(view.title).text("Rock, Paper, Scissors - Green Monkeys' Edition")
 		view.buttons.template = _.template('<button type="button" class="btn btn-lg btn-<%= type %> glyphicon glyphicon-<%= iconName %>" id="<%= text %>"><%= text %></button>')
-
+		//$('#main').css('background-image','url("/img/splash.png")')
 		$('.title').height('50px')
-		//$('#title').css('font-family': 'PT Sans Caption', 'sans-serif')
+		//$('.title').height('80%')
 		$('.title').css('background-color','#195E19')
-		$('body').css('background-color','#195E19')+
+		$('body').css('background-color','#195E19')
 		$('.title').css('color','#FFD700')
 
 
