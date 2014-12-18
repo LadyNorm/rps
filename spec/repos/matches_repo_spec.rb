@@ -11,7 +11,7 @@ describe RpsGame::MatchesRepo do
     db.exec("SELECT COUNT(*) FROM sessions")[0]["count"].to_i
   end
 
-  def match_count
+  def round_count(db)
     db.exec("SELECT COUNT(*) FROM matches")[0]["count"].to_i
   end
 
@@ -47,5 +47,17 @@ describe RpsGame::MatchesRepo do
     expect(game_info['player_two_id']).to eq @user_id_2
   end
 
-  
+  it "gets all matches" do
+    expect(user_count(db)).to eq 2
+    game_info = RpsGame::MatchesRepo.create_game(db, @players_info)
+    game_hash = game_info['game_hash']
+    sql = %q[
+            INSERT INTO matches (hash, player_one_id, player_one_move, player_two_id, player_two_move, winner)
+            VALUES ($1, $2, $3, $4, $5, $6)
+    ]
+    db.exec(sql, [game_hash, @user_id_1, 'rock', @user_id_2, 'scissors', @user_id_1])
+    all_rounds = RpsGame::MatchesRepo.all(db).entries
+    expect(all_rounds).to be_a Array
+    expect(round_count(db)).to eq 1
+  end  
 end
