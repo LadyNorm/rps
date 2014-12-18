@@ -268,4 +268,16 @@ function startSession()
 	
 	
 }
+
+function endSession()
+{
+
+
+
+
+
+
+
+	
+}
 	
