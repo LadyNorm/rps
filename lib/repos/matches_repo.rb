@@ -16,11 +16,11 @@ module RpsGame
 
     def self.player_move(db, round_data)
       if ((round_data['player_one_move'] == 'rock' && round_data['player_two_move'] == 'scissors') || (round_data['player_one_move'] == 'paper' && round_data['player_two_move'] == 'rock') || (round_data['player_one_move'] == 'scissors' && round_data['player_two_move'] == 'paper'))
-        winner = round_data['player_one_id']
+        winner = @game_info['player_one_id']
       elsif ((round_data['player_two_move'] == 'rock' && round_data['player_one_move'] == 'scissors') || (round_data['player_two_move'] == 'paper' && round_data['player_one_move'] == 'rock') || (round_data['player_two_move'] == 'scissors' && round_data['player_one_move'] == 'paper'))
-        winner = round_data['player_two_id']
+        winner = @game_info['player_two_id']
       elsif round_data['player_one_move'] == round_data['player_two_move']
-        winner = 'tie'
+        winner = "tie"
       else
         raise 'Invalid player move.'
       end
