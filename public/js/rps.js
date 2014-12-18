@@ -4,7 +4,6 @@ view.dialog = {}
 function init()
 {
 
-
 		view.title = $('<h1>')
 		$(view.title).text("Rock, Paper, Scissors - Green Monkeys' Edition")
 		view.buttons.template = _.template('<button type="button" class="btn btn-lg btn-<%= type %> glyphicon glyphicon-<%= iconName %>" id="<%= text %>"><%= text %></button>')
@@ -90,8 +89,8 @@ function init()
 			$(buttons).append(code)
 		})
 
-		//view.modal('Welcome!', buttons)
-
+		view.modal('Welcome!', buttons)
+		$('#Sign-In').css('margin-right','4px')
 
 }
 
