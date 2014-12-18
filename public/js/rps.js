@@ -153,9 +153,11 @@ function signin()
 		  		else
 		  		{
 		  			console.log(response)
-				  	console.log("Signed In", response)
-				  	ctrl.sessionId = response
+				  	console.log("Signed In", response["sessionId"])
+				  	ctrl.sessionId = response["sessionId"]
+				  	ctrl.userId = response["user_id"]
 				  	localStorage.setItem("sessionId", ctrl.sessionId)
+				  	localStorage.setItem("userId", ctrl.userId)
 				  	view.closeModal()
 				  	startSession()
 				}
@@ -213,8 +215,10 @@ function signup()
 		  		{
 		  			console.log(response)
 				  	console.log("Signed Up", response["sessionId"])
-				  	ctrl.sessionId = response
+				  	ctrl.sessionId = response["sessionId"]
+				  	ctrl.userId = response["user_id"]
 				  	localStorage.setItem("sessionId", ctrl.sessionId)
+				  	localStorage.setItem("userId", ctrl.userId)
 				  	view.closeModal()
 				  	startSession()
 				}
@@ -224,9 +228,34 @@ function signup()
 
 function startSession()
 {
-	$('#splash').hide('fade')
-	$('#main').append($("<div>").addClass('container').append($("<div>").addClass('row').append($("<div>").addClass('col-md-4'))).css('background-color', "FFFFFF"))
 
+	jQuery.get('/online', null, function(players){
+	
+		console.log(players)
+		$('center').remove()
+		$('#splash').hide('fade')
+		onlinePlayers = $('<div>').attr('id', 'onlinePlayers')
+		$table = $('<table>')
 
+		$name = $('<th>').text('Name')
+		$score = $('<th>').text('Score')
+		$($table).addClass('table table-bordered table-hover table-condensed').append($('<thead>').append($name).append($score))
+		players = JSON.parse(players)
+		$.each(players, function(i,v){
+			$table.append($('<tr>').addClass('active').append($('<td>').text(v['username'])).append($('<td>').text(v['score'])))
+
+		})
+		$($table).css('margin-left', '2px')
+		$($table).css('margin-right', '2px')
+		$(onlinePlayers).css("margin","3px").css("border","1px solid black").append($("<div>").append($("<div>").addClass('row').append($("<div>").addClass('col-md-4').attr('id','tableHolder'))).css('background-color', "FFFFFF"))
+		$('#main').append(onlinePlayers)
+		$("#tableHolder").append($('h4').text("Online Players").css('margin-left',"4px"))
+		$("#tableHolder").append($table)
+		$(onlinePlayers).css('float', 'right')
+
+	})
+	
+
+	
 }
 	
