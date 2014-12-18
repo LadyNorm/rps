@@ -66,9 +66,7 @@ module RpsGame
         player_two_id INTEGER REFERENCES users(id)
           ON DELETE CASCADE
           ON UPDATE CASCADE,
-        winner INTEGER REFERENCES users(id)
-          ON DELETE CASCADE
-          ON UPDATE CASCADE
+        winner VARCHAR
         );
     SQL
   end

@@ -2,7 +2,7 @@ module RpsGame
   class UsersRepo
     def self.all(db)
       #
-      db.exec('SELECT * FROM users')
+      db.exec('SELECT * FROM users').entries
     end
 
     def self.get_id(db, username)
