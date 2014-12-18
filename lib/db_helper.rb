@@ -1,6 +1,6 @@
 require 'pg'
 require 'securerandom'
-require 'BCrypt'
+require 'bcrypt'
 
 module RpsGame
   # def self.create_db_connection()
