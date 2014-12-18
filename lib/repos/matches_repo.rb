@@ -31,18 +31,18 @@ module RpsGame
         
       db.exec('INSERT INTO matches (hash, player_one_id, player_one_move, player_two_id, player_two_move, winner) VALUES ($1, $2, $3, $4, $5, $6)', [game_info['game_hash'], game_info['player_one_id'], round_data['player_one_move'], game_info['player_two_id'], round_data['player_two_move'], winner])
 
-      {
-        'game_hash' => game_info['game_hash'],
-        'player_one_id' => game_info['player_one_id'],
-        'player_two_id' => game_info['player_two_id']
-      }
+      RpsGame::MatchesRepo.scoredboard(db, game_info)
+
+      # {
+      #   'game_hash' => game_info['game_hash'],
+      #   'player_one_id' => game_info['player_one_id'],
+      #   'player_two_id' => game_info['player_two_id']
+      # }
     end
 
     def self.scoreboard(db, game_info)
       player_one_score = db.exec('SELECT * FROM matches WHERE hash = $1 AND winner = $2', [game_info['game_hash'], game_info['player_one_id']]).entries.count
-      puts "player_one_score - #{player_one_score} #{player_one_score.class}"
       player_two_score = db.exec('SELECT * FROM matches WHERE hash = $1 AND winner = $2', [game_info['game_hash'], game_info['player_two_id']]).entries.count
-      puts "player_two_score - #{player_two_score} #{player_two_score.class}"
       if player_one_score == 3 || player_two_score == 3
         game_history = db.exec('SELECT * FROM matches WHERE hash = $1', [game_info['game_hash']]).entries
 
