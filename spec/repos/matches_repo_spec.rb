@@ -105,13 +105,11 @@ describe RpsGame::MatchesRepo do
       'player_two_move' => 'rock'
     }
     RpsGame::MatchesRepo.player_move(db, game_info, round_data_4)
+    RpsGame::MatchesRepo.scoreboard(db, game_info)
 
-    game_result = db.exec("SELECT * FROM games").entries
+    game_result = db.exec("SELECT * FROM games").entries.first
 
-    result = RpsGame::MatchesRepo.scoreboard(db, game_info).entries
-
-    binding.pry
-    expect(result['player_one_score']).to eq 3
-    expect(result['player_two_score']).to eq 0
+    expect(game_result['winner']).to eq @user_id_1.to_s
+    expect(match_count(db)).to eq 0
   end
 end
