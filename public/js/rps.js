@@ -145,7 +145,7 @@ function signin()
 			$.ajax({
 			  type: 'POST',
 			  url: '/signin',
-			  data:fields
+			  data:data
 			}).success(function(response) {
 				console.log(response)
 				if(response["error"])
@@ -202,7 +202,7 @@ function signup()
 			$.ajax({
 			  type: 'POST',
 			  url: '/signup',
-			  data:fields
+			  data:data
 			}).success(function(response) {
 				console.log(response)
 				if(response["error"])
