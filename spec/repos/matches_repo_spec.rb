@@ -1,4 +1,5 @@
 require "spec_helper"
+require 'pry-byebug'
 
 describe RpsGame::MatchesRepo do
 
@@ -31,13 +32,19 @@ describe RpsGame::MatchesRepo do
     ]
     @user_id_1 = db.exec(sql1, ['alice', 'wonderland']).first['id'].to_i
     @user_id_2 = db.exec(sql2, ['dora', 'explora']).first['id'].to_i
+    @players_info = {
+      'player_one_id' => @user_id_1,
+      'player_two_id' => @user_id_2
+    }
 
   end
 
-  it "has correct logic for player moves" do
+  it "creates a game with two players" do
     expect(user_count(db)).to eq 2
-
-
+    game_info = RpsGame::MatchesRepo.create_game(db, @players_info)
+    expect(game_info).to be_a Hash
+    expect(game_info['player_one_id']).to eq @user_id_1
+    expect(game_info['player_two_id']).to eq @user_id_2
   end
 
   
