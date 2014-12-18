@@ -4,7 +4,8 @@ require 'sinatra/reloader'
 require 'pry-byebug'
 require 'bcrypt'
 
-lib_files = ['lib/db_helper.rb', 'lib/repos/user_repo.rb', 'lib/repos/game_repo.rb']
+#'lib/repos/user_repo.rb', 'lib/repos/game_repo.rb'
+lib_files = ['lib/db_helper.rb']
 
 lib_files.each do |f|
 	require_relative f
