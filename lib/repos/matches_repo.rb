@@ -4,9 +4,13 @@ module RpsGame
       db.exec('SELECT * FROM matches').entries
     end
 
+    def self.matches_for_game(db, game_hash)
+      db.exec('SELECT * FROM matches WHERE hash = $1', [game_hash]).entries
+    end
+
     def self.create_game(db, players_info)
       game_hash = SecureRandom.hex(16)
-      {
+      @game_info = {
         'game_hash' => game_hash,
         'player_one_id' => players_info['player_one_id'],
         'player_two_id' => players_info['player_two_id']
