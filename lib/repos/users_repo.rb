@@ -6,7 +6,7 @@ module RpsGame
     end
 
     def self.get_id(db, username)
-      db.exec('SELECT id FROM users WHERE username = $1', [username])
+      db.exec('SELECT id FROM users WHERE username = $1', [username]).first['id']
     end
 
     def self.sign_in(db, user_data)
