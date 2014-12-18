@@ -78,7 +78,13 @@ function init()
 				$(".modal-footer").empty()
 			}
 			$('#modalDialog').modal({backdrop:'static'})
-			$('#modalDialog').css('opacity', '0.87')
+			$('#modalDialog').css('opacity', '0.78')
+			$('#modalDialog').mouseenter(function() {
+  				$(this).css("opacity",".90")
+			});
+			$('#modalDialog').mouseleave(function() {
+  				$(this).css("opacity","0.78")
+			});
 
 		}
 
