@@ -27,3 +27,19 @@ end
 get '/' do
 	erb :"index"
 end
+
+post '/signin' do
+	db = RpsGame.create_db_connection('rps_dev')
+	user_data = {}
+	user_data['username'] = params[:username]
+	user_data['password'] = params[:password]
+	RpsGame::UsersRepo.sign_in(db, user_data)
+end
+
+post '/signup' do
+	db = RpsGame.create_db_connection('rps_db')
+	user_data = {}
+	user_data['username'] = params[:username]
+	user_data['password'] = params[:password]
+	RpsGame::UsersRepo.sign_up(db, user_data)
+end
