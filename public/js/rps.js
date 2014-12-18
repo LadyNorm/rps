@@ -171,9 +171,49 @@ function signup()
 		$label = $('<label>')
 		$input = $('<input>')
 		$input.attr('id', v)
-		$label.attr('')
-	}
+		$label.attr('for', v)
+		$input.attr('name', v)
+		$label.text(v.charAt(0).toUpperCase() + v.slice(1)+":")
+		$(signupForm).append($label)
+		$(signupForm).append($input)
+		$(signupForm).append($('<br>'))
 
+	})
+	footerButtons = $('<div>')
+	
+	submit = view.buttons.template({type:'primary', iconName:'user', text:'Sign-Up'})
+	cancel = view.buttons.template({type:'warning', iconName:'remove', text:'Cancel'})
+	footerButtons.append(submit)
+	footerButtons.append(cancel)
 
-)
-}	
+	//view.closeModal()
+	view.modal("Sign Up", signupForm, true, footerButtons)
+	$('#Sign-Up').css('margin-right','4px')
+	$('#Cancel').click(welcome)
+	$('#Sign-Up').click(function(){
+		var data = {}
+		$("input").each(function(i,v){
+					v = $(v)
+					k = $(v).attr('id')
+					data[k] = v.val()
+			})
+			console.log(data)
+			$.ajax({
+			  type: 'POST',
+			  url: '/signup',
+			  data:fields
+			}).success(function(response) {
+				console.log(response)
+				if(response["error"])
+		  			$(view.signupForm).parent().append(ctrl.compiledErrorTemplate({error:response['error']}))
+		  		else
+		  		{
+		  			console.log(response)
+				  	console.log("Signed Up", response["apiToken"])
+				  	ctrl.apiToken = response["apiToken"]
+				  	localStorage.setItem("apiToken", ctrl.apiToken)
+				}
+			})
+	})
+}
+	
