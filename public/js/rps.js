@@ -55,14 +55,14 @@ function init()
 
 		
 		
-		$('#Sign-In').css('float','right')
+		$('#Sign-In').css('float','right')	
 		$('#Sign-Up').css('float','right')
 		$('#Sign-In').css('margin-top','3px')
 		$('#Sign-Up').css('margin-top','3px')
 		$('#Sign-Up').click(signup)
 		$('#header').append(view.title)
 
-		view.modal = function(title, content, footer)
+		view.modal = function(title, content, mandatory, footer)
 		{
 			$(".modal-title").text(title)
 			$(".modal-body").empty()
@@ -77,8 +77,13 @@ function init()
 			{
 				$(".modal-footer").empty()
 			}
-			$('#modalDialog').modal('show')
+			$('#modalDialog').modal({backdrop:'static'})
 
+		}
+
+		view.closeModal = function()
+		{
+			$('#modalDialog').modal('hide')
 		}
 		buttons = $('<center>')
 
@@ -88,15 +93,15 @@ function init()
 			$(buttons).append(code)
 		})
 
-		view.modal('Welcome!', buttons)
+		view.modal('Welcome!', buttons, true)
 		$('#Sign-In').css('margin-right','4px')
 
 }
 
 function login()
 {
-
-
+	view.closeModal
+	//view.modal("Login")
 
 
 
@@ -107,9 +112,9 @@ function login()
 
 }
 
-function signup(e)
+function signup()
 {
-	e.preventDefault()	
+	view.closeModal
 
 
 
