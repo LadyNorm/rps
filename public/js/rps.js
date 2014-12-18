@@ -152,6 +152,7 @@ function signin()
 		  			$(view.signinForm).parent().append(ctrl.compiledErrorTemplate({error:response['error']}))
 		  		else
 		  		{
+		  			response = JSON.parse(response)
 		  			console.log(response)
 				  	console.log("Signed In", response["sessionId"])
 				  	ctrl.sessionId = response["sessionId"]
@@ -228,21 +229,21 @@ function signup()
 
 function startSession()
 {
-
+	$table = $('<table>')
 	jQuery.get('/online', null, function(players){
 	
 		console.log(players)
 		$('center').remove()
 		$('#splash').hide('fade')
 		onlinePlayers = $('<div>').attr('id', 'onlinePlayers')
-		$table = $('<table>')
+		
 
 		$name = $('<th>').text('Name')
 		$score = $('<th>').text('Score')
 		$($table).addClass('table table-bordered table-hover table-condensed').append($('<thead>').append($name).append($score))
 		players = JSON.parse(players)
 		$.each(players, function(i,v){
-			$table.append($('<tr>').addClass('active').append($('<td>').text(v['username'])).append($('<td>').text(v['score'])))
+			$table.append($('<tr>').addClass('active').attr('id','player-'+v['id']).append($('<td>').text(v['username'])).append($('<td>').text(v['score'])))
 
 		})
 		$($table).css('margin-left', '2px')
@@ -253,8 +254,29 @@ function startSession()
 		$("#tableHolder").append($table)
 		$(onlinePlayers).css('float', 'right')
 
+		$('tr', $table).click(function(e){
+		tgt = e.currentTarget
+		playerId = $(tgt).attr('id')
+		playerId = playerId.substring(playerId.indexOf('-')+1, playerId.length)
+		
+		if (playerId != parseInt(localStorage.getItem('userId')))
+			console.log(playerId)
+	})
+
 	})
 	
+	
+	
+}
+
+function endSession()
+{
+
+
+
+
+
+
 
 	
 }
