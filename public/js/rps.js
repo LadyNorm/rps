@@ -78,6 +78,7 @@ function init()
 				$(".modal-footer").empty()
 			}
 			$('#modalDialog').modal({backdrop:'static'})
+			$('#modalDialog').css('opacity', '0.87')
 
 		}
 
@@ -85,6 +86,12 @@ function init()
 		{
 			$('#modalDialog').modal('hide')
 		}
+		
+		welcome()
+
+}
+function welcome()
+{
 		buttons = $('<center>')
 
 		buttonAttribs = [{type:'primary', iconName:'user', text:'Sign-In'},{type:'success', iconName:'pencil', text:'Sign-Up'}]
@@ -97,20 +104,62 @@ function init()
 		$('#Sign-In').css('margin-right','4px')
 		$('#Sign-In').click(signin)
 		$('#Sign-Up').click(signup)
-
 }
-
 function signin()
 {
 
 	signinForm = $("<form>")
-	fields = ['username', 'passowrd']
-	$('<label>').text('Username:')
+	fields = ['username', 'password']
+	$.each(fields, function(i, v){
+		$label = $('<label>')
+		$input = $('<input>')
+		if(v == 'password')
+			$input.attr('type',v)
+		$input.attr('id', v)
+		$label.attr('for', v)
+		$input.attr('name', v)
+		$label.text(v.charAt(0).toUpperCase() + v.slice(1)+":")
+		$(signinForm).append($label)
+		$(signinForm).append($input)
+		$(signinForm).append($('<br>'))
 
-	view.closeModal()
-	view.modal("Login")
+	})
+	footerButtons = $('<div>')
+	
+	submit = view.buttons.template({type:'primary', iconName:'user', text:'Sign-In'})
+	cancel = view.buttons.template({type:'warning', iconName:'remove', text:'Cancel'})
+	footerButtons.append(submit)
+	footerButtons.append(cancel)
 
-
+	//view.closeModal()
+	view.modal("Login", signinForm, true, footerButtons)
+	$('#Sign-In').css('margin-right','4px')
+	$('#Cancel').click(welcome)
+	$('#Sign-In').click(function(){
+		var data = {}
+		$("input").each(function(i,v){
+					v = $(v)
+					k = $(v).attr('id')
+					data[k] = v.val()
+			})
+			console.log(data)
+			$.ajax({
+			  type: 'POST',
+			  url: '/signin',
+			  data:fields
+			}).success(function(response) {
+				console.log(response)
+				if(response["error"])
+		  			$(view.signinForm).parent().append(ctrl.compiledErrorTemplate({error:response['error']}))
+		  		else
+		  		{
+		  			console.log(response)
+				  	console.log("Signed In", response["apiToken"])
+				  	ctrl.apiToken = response["apiToken"]
+				  	localStorage.setItem("apiToken", ctrl.apiToken)
+				}
+			})
+	})
 
 }
 
