@@ -11,13 +11,15 @@ describe RpsGame::MatchesRepo do
     db.exec("SELECT COUNT(*) FROM sessions")[0]["count"].to_i
   end
 
-  def round_count(db)
+  def match_count(db)
     db.exec("SELECT COUNT(*) FROM matches")[0]["count"].to_i
   end
 
   let(:db) { RpsGame.create_db_connection('rps_test') }
   
   before(:each) do
+    RpsGame.drop_tables(db)
+    RpsGame.create_tables(db)
     RpsGame.clear_tables(db)
     # Add two players to users before each test
     sql1 = %q[
@@ -56,8 +58,46 @@ describe RpsGame::MatchesRepo do
             VALUES ($1, $2, $3, $4, $5, $6)
     ]
     db.exec(sql, [game_hash, @user_id_1, 'rock', @user_id_2, 'scissors', @user_id_1])
-    all_rounds = RpsGame::MatchesRepo.all(db).entries
-    expect(all_rounds).to be_a Array
-    expect(round_count(db)).to eq 1
-  end  
+    all_matches = RpsGame::MatchesRepo.all(db).entries
+    expect(all_matches).to be_a Array
+    expect(match_count(db)).to eq 1
+  end
+
+  it "logs player moves in matches and correctly determines a winner" do
+    expect(user_count(db)).to eq 2
+    game_info = RpsGame::MatchesRepo.create_game(db, @players_info)
+    game_hash = game_info['game_hash']
+    round_data = {
+      'player_one_move' => 'rock',
+      'player_two_move' => 'scissors'
+    }
+    RpsGame::MatchesRepo.player_move(db, game_info, round_data)
+    winner = db.exec("SELECT winner FROM matches WHERE hash = $1", [game_hash]).first['winner'].to_i
+    expect(winner).to eq @user_id_1
+  end
+
+  it "correctly returns the current score of a game" do
+    expect(user_count(db)).to eq 2
+    game_info = RpsGame::MatchesRepo.create_game(db, @players_info)
+    game_hash = game_info['game_hash']
+    round_data_1 = {
+      'player_one_move' => 'rock',
+      'player_two_move' => 'scissors'
+    }
+    round_data_2 = {
+      'player_one_move' => 'rock',
+      'player_two_move' => 'rock',
+    }
+    round_data_3 = {
+      'player_one_move' => 'scissors',
+      'player_two_move' => 'paper'
+    }
+    RpsGame::MatchesRepo.player_move(db, game_info, round_data_1)
+    RpsGame::MatchesRepo.player_move(db, game_info, round_data_2)
+    RpsGame::MatchesRepo.player_move(db, game_info, round_data_3)
+
+    result = RpsGame::MatchesRepo.scoreboard(db, game_info)
+    expect(result['player_one_score']).to eq 2
+    expect(result['player_two_score']).to eq 0
+  end
 end
