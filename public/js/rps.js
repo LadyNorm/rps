@@ -117,6 +117,14 @@ function signin()
 function signup()
 {
 	signupForm = $("<form>")
+	fields = ['username', 'password']
+	$.each(fields, function(i, v){
+		$label = $('<label>')
+		$input = $('<input>')
+		$input.attr('id', v)
+		$label.attr('')
+	}
+
 	view.closeModal()
 
 
