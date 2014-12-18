@@ -153,9 +153,11 @@ function signin()
 		  		else
 		  		{
 		  			console.log(response)
-				  	console.log("Signed In", response["apiToken"])
-				  	ctrl.apiToken = response["apiToken"]
-				  	localStorage.setItem("apiToken", ctrl.apiToken)
+				  	console.log("Signed In", response)
+				  	ctrl.sessionId = response
+				  	localStorage.setItem("sessionId", ctrl.sessionId)
+				  	view.closeModal()
+				  	startSession()
 				}
 			})
 	})
@@ -211,10 +213,17 @@ function signup()
 		  		{
 		  			console.log(response)
 				  	console.log("Signed Up", response["sessionId"])
-				  	ctrl.sessionId = response["sessionId"]
+				  	ctrl.sessionId = response
 				  	localStorage.setItem("sessionId", ctrl.sessionId)
+				  	view.closeModal()
+				  	startSession()
 				}
 			})
 	})
+}
+
+function startSession()
+{
+	$('#splash').hide('fade')
 }
 	
