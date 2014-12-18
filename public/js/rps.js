@@ -1,4 +1,5 @@
 view = {}
+ctrl = {}
 view.buttons = {}
 view.dialog = {}
 function init()
