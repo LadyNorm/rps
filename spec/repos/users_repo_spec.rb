@@ -96,7 +96,7 @@ describe RpsGame::UsersRepo do
       'session_id' => returned_1
     }
 
-    RpsGame::UsersRepo.sign_out(db, user_data_2)
+    RpsGame::SessionsRepo.end_session(db, user_data_2)
     expect(user_count(db)).to eq 1
     expect(session_count(db)).to eq 0
 
@@ -108,8 +108,4 @@ describe RpsGame::UsersRepo do
     expect(session_count(db)).to eq 1
 
   end
-
-
-
-
 end

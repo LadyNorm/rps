@@ -15,15 +15,41 @@ lib_files.each do |f|
 end
 
 before do
-	if session['user_id']
-	  user_id = session['user_id']
-	  @db = RpsGame.create_db_connection
-	  @current_user = RpsGame::UsersRepo.find @db, user_id
-	else
-	  @current_user = {'username' => 'anonymous', 'id' => 1}
-	end
+	# if session['user_id']
+	#   user_id = session['user_id']
+	#   @db = RpsGame.create_db_connection
+	#   @current_user = RpsGame::UsersRepo.find @db, user_id
+	# else
+	#   @current_user = {'username' => 'anonymous', 'id' => 1}
+	# end
+	@db = RpsGame.create_db_connection('rps_dev')
 end
 
 get '/' do
 	erb :"index"
+end
+
+post '/signin' do
+	# db = RpsGame.create_db_connection('rps_dev')
+	user_data = {}
+	user_data['username'] = params[:username]
+	user_data['password'] = params[:password]
+	RpsGame::UsersRepo.sign_in(@db, user_data).to_json
+end
+
+post '/signup' do
+	# db = RpsGame.create_db_connection('rps_dev')
+	user_data = {}
+	user_data['username'] = params[:username]
+	user_data['password'] = params[:password]
+	RpsGame::UsersRepo.sign_up(@db, user_data).to_json
+
+end
+
+post '/signout' do
+	# db = RpsGame.create_db_connection('rps_dev')
+	user_data = {}
+	user_data['id'] = localStorage['user_id']
+	user_data['session_id'] = localStorage['session_id']
+	RpsGame::SessionsRepo.end_session(@db, user_data)
 end
