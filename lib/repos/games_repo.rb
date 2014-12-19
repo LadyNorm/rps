@@ -1,7 +1,7 @@
 module RpsGame
 	class GamesRepo
     def self.history(db, player_id)
-      db.exec('SELECT * FROM games WHERE player_one_id = $1 OR player_two_id = $1', [player_id])
+      db.exec('SELECT * FROM games WHERE player_one_id = $1 OR player_two_id = $1', [player_id]).entries
     end
 
 		def self.save(db, match_data)
