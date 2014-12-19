@@ -62,8 +62,8 @@ get '/standings' do
 	JSON.generate(RpsGame::UsersRepo.standings(@db).to_a)
 end
 
-get '/currentGames/:player_id' do
-	JSON.generate(RpsGame::MatchesRepo.matches_by_player(@db, params[:player_id]).to_a)
+post '/current_games' do
+	JSON.generate(RpsGame::MatchesRepo.matches_by_player(@db, params[:player_id]))
 end
 
 get '/info/:player_id' do

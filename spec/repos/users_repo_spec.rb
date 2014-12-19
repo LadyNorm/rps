@@ -135,6 +135,26 @@ describe RpsGame::UsersRepo do
 
     expect(user_count(db)).to eq 1
     expect(session_count(db)).to eq 1
+  end
 
+  it "properly reports the standings" do
+    user_1 = ['Alice', 'wonderland', 4]
+    user_2 = ['Bob', 'builder', 2]
+    user_3 = ['Duevyn', 'Cooke', 17]
+    user_4 = ['tie', 'guy', 4]
+    sql = %q[
+            INSERT INTO users (username, password, score)
+            VALUES ($1, $2, $3)
+          ]
+    db.exec(sql, user_1)
+    db.exec(sql, user_2)
+    db.exec(sql, user_3)
+    db.exec(sql, user_4)
+
+    result = RpsGame::UsersRepo.standings(db).entries
+    expect(result[0]['username']).to eq "Duevyn"
+    expect(result[1]['username']).to eq "Alice"
+    expect(result[2]['username']).to eq "tie"
+    expect(result[3]['username']).to eq "Bob"
   end
 end

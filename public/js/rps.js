@@ -42,8 +42,8 @@ function init()
 		//$('#main').css('background-image','url("/img/splash.png")')
 		$('.title').height('50px')
 		//$('.title').height('80%')
-		$('.title').css('background-color','#308850')
-		$('body').css('background-color','#308850')
+		$('.title').css('background-color','#195E19')
+		$('body').css('background-color','#195E19')
 		$('.title').css('color','#FFD700')
 
 
@@ -243,41 +243,27 @@ function signup()
 function startSession()
 {
 	$table = $('<table>')
-	jQuery.get('/online', null, function(players){
 	
-		console.log(players)
-		$('center').remove()
-		$('#splash').hide('fade')
-		onlinePlayers = $('<div>').attr('id', 'onlinePlayers')
-		
+	$('center').remove()
+	$('#splash').hide('fade')
+	view.onlinePlayers = $('<div>').attr('id', 'onlinePlayers')
 
-		$name = $('<th>').text('Name')
-		$score = $('<th>').text('Score')
-		$($table).addClass('table table-bordered table-hover table-condensed').append($('<thead>').append($name).append($score))
-		players = JSON.parse(players)
-		$.each(players, function(i,v){
-			$table.append($('<tr>').addClass('active').attr('id','player-'+v['id']).append($('<td>').text(v['username'])).append($('<td>').text(v['score'])))
-
-		})
-		$($table).css('margin-left', '2px')
-		$($table).css('margin-right', '2px')
-		$(onlinePlayers).css("margin","3px").css("border","1px solid black").append($("<div>").append($("<div>").addClass('row').append($("<div>").addClass('col-md-4').attr('id','tableHolder'))).css('background-color', "FFFFFF"))
-		$('#main').append(onlinePlayers)
-		$("#tableHolder").append($('h4').text("Online Players").css('margin-left',"4px"))
-		$("#tableHolder").append($table)
-		$(onlinePlayers).css('float', 'right')
-
-		$('tr', $table).click(function(e){
-		tgt = e.currentTarget
-		playerId = $(tgt).attr('id')
-		playerId = playerId.substring(playerId.indexOf('-')+1, playerId.length)
-		
-		if (playerId != parseInt(localStorage.getItem('userId')))
-			playerInfo(playerId)
-		})
-	})
-
-
+	view.currentGames = $('<div>').attr('id', 'currentGames')
+	columns = ["Opponent", "Score", "Opponent's Score"]
+	$(view.currentGames).append($('<table>').append())
+	$
+	$('#main').append(view.onlinePlayers)
+	$('#main').append(view.currentGames)
+	$(view.onlinePlayers).css('float', 'right')
+	$(view.onlinePlayers).css("margin","3px").css("border","1px solid black").append($("<div>").append($("<div>").addClass('row').append($("<div>").addClass('col-md-4').attr('id','tableHolder'))).css('background-color', "FFFFFF"))
+	$name = $('<th>').text('Name')
+	$score = $('<th>').text('Score')
+	$($table).addClass('table table-bordered table-hover table-condensed').append($('<thead>').append($name).append($score))
+	$($table).attr('id', 'onlinePlayers')
+	$($table).css('margin-left', '2px')
+	$($table).css('margin-right', '2px')
+	online_players()
+	current_games()
 	
 }
 
@@ -324,7 +310,7 @@ function challenge(playerId)
   	type: "POST",
   	url: '/new_game',
   	data: data,
-  	success: function(x){console.log(x)}
+  	success: function(x){ console.log(x)	}
 	});
 
 
@@ -335,8 +321,43 @@ function challenge(playerId)
 
 function current_games()
 {
-	jQuery.get('/new_game'+ctrl.userId, null, function(games){
-		console.log("games "+games)
-	})
+	data = {player_id: ctrl.userId}
+	$.ajax({
+  	type: "POST",
+  	url: '/current_games',
+  	data: data,
+  	success: function(x){
 
+
+  	}
+	});
+}
+
+function online_players()
+{
+	jQuery.get('/online', null, function(players){
+		console.log(players)
+
+		$('tr', '#onlinePlayers').remove()
+		players = JSON.parse(players)
+
+		$.each(players, function(i,v){
+			$table.append($('<tr>').addClass('active').attr('id','player-'+v['id']).append($('<td>').text(v['username'])).append($('<td>').text(v['score'])))
+
+		})
+		
+		
+		
+		$("#tableHolder").append($('h4').text("Online Players").css('margin-left',"4px"))
+		$("#tableHolder").append($table)
+
+		$('tr', $table).click(function(e){
+			tgt = e.currentTarget
+			playerId = $(tgt).attr('id')
+			playerId = playerId.substring(playerId.indexOf('-')+1, playerId.length)
+			
+			if (playerId != parseInt(localStorage.getItem('userId')))
+				playerInfo(playerId)
+		})
+	})
 }
