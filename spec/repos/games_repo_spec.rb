@@ -66,8 +66,6 @@ describe RpsGame::GamesRepo do
     player_1_score = RpsGame::GamesRepo.calculate_score(db, @user_id_1)
     player_2_score = RpsGame::GamesRepo.calculate_score(db, @user_id_2)
 
-    binding.pry
-
     expect(player_1_score).to eq 1
     expect(player_2_score).to eq -1
   end
