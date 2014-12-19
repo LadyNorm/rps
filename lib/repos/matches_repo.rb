@@ -4,8 +4,11 @@ module RpsGame
       db.exec('SELECT * FROM matches').entries
     end
 
-    def self.opponent_name(db, game_hash)
-      db.exec('SELECT username FROM matches m JOIN users u ON u.id = m.player_two_id WHERE hash = $1', [game_hash]).entries.first
+    def self.opponent_name(db, game_data)
+      if (db.exec('SELECT * from MATCHES WHERE hash = $1 AND player_one_id = $2', [game_data['hash'], game_data['player_id']]).entries.count > 0)
+        db.exec('SELECT username FROM matches m JOIN users u ON u.id = m.player_two_id WHERE hash = $1 AND player_id_one = $2', [game_data['hash'], game_data['player_id']]).entries.first
+      else
+        db.exec('SELECT username FROM matches m JOIN users u ON u.id = m.player_two_id WHERE hash = $1 AND player_two_id = $2', [game_data['hash'], game_data['player_id']]).entries.first
     end
 
     def self.matches_by_player(db, player_id)
