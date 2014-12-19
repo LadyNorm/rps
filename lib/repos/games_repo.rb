@@ -6,13 +6,14 @@ module RpsGame
 
     def self.calculate_score(db, player_id)
       wins = db.exec('SELECT * FROM games WHERE winner = $1', [player_id]).entries.count
-      losses = (wins - (RpsGame::GamesRepo.history(db, player_id).count))
+      losses = ((RpsGame::GamesRepo.history(db, player_id).count) - wins)
       score = wins - losses
 
       RpsGame::UsersRepo.update_score(db, {
           'player_id' => player_id,
           'score' => score
         })
+      score
     end
 
 		def self.save(db, match_data)
