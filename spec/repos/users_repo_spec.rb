@@ -35,9 +35,41 @@ describe RpsGame::UsersRepo do
     expect(scores).to include "4", "-2" 
   end
 
-  # xit "finds a user" do
-  #   user = RpsGame::UsersRepo.sign_in(db, { 'username' => 'Alice'} )
-  #   retrieved_user = RpsGame::UsersRepo.find(db, user['id'] )
+  it "gets all online-users" do
+    user_data_1 = {
+      'username' => 'Alice',
+      'password' => 'wonderland'
+    }
+    user_data_2 = {
+      'username' => 'Jiminy',
+      'password' => 'cricket'
+    }
+    user_data_3 = {
+      'username' => 'project',
+      'password' => '2501'
+    }
+    sql = %q[
+          INSERT INTO users (username, password, score) 
+          VALUES ($1, $2, $3)
+          ]
+    # db.exec(sql, ['Alice', 'wonderland', 0])
+    # db.exec(sql, ['Jiminy', 'cricket', 0])
+    db.exec(sql, ['project', '2501', 0])
+
+    returned_1 = RpsGame::UsersRepo.sign_up(db, user_data_1)['session_id']
+    returned_2 = RpsGame::UsersRepo.sign_up(db, user_data_2)['session_id']
+
+    result = RpsGame::UsersRepo.online_users(db).entries
+
+    expect(result.count).to eq 2
+    online_users = result.map { |u| u['username'] }
+    expect(online_users).to include 'Alice', 'Jiminy'
+    response = RpsGame::UsersRepo.all(db).entries
+
+    users = response.map { |u| u['username'] }
+    expect(users).to include 'Alice', 'Jiminy', 'project'
+
+  end
 
   it "signs up a user" do
     expect(user_count(db)).to eq 0
@@ -73,8 +105,6 @@ describe RpsGame::UsersRepo do
   end
 
   it "signs up a user, also testing signout/in" do
-
-    # binding.pry
 
     expect(user_count(db)).to eq 0
     expect(session_count(db)).to eq 0
