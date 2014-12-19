@@ -176,7 +176,3 @@ describe RpsGame::UsersRepo do
 
   end
 end
-
-#     def self.update_score(db, player_data)
-    #   db.exec('UPDATE users SET score = $1 WHERE id = $2', [player_data['score'], player_data['player_id']])
-    # end
