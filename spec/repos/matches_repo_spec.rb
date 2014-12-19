@@ -61,7 +61,7 @@ describe RpsGame::MatchesRepo do
     db.exec(sql, [game_hash, @user_id_1, 'rock', @user_id_2, 'scissors', @user_id_1])
     all_matches = RpsGame::MatchesRepo.all(db).entries
     expect(all_matches).to be_a Array
-    expect(match_count(db)).to eq 1
+    expect(match_count(db)).to eq 2
   end
 
   it "gets all matches of a specific game" do 
@@ -93,7 +93,7 @@ describe RpsGame::MatchesRepo do
 
     expect(result).to be_a Array
     expect(result[0]).to be_a Hash
-    expect(result.count).to eq 4
+    expect(result.count).to eq 5
   end
 
   it "gets all matches belonging to one of two players" do
@@ -148,8 +148,8 @@ describe RpsGame::MatchesRepo do
     result_4 = RpsGame::MatchesRepo.matches_by_player(db, user_id_4)
 
     expect(result_1).to be_a Array 
-    expect(result_2.count).to eq 2
-    expect(result_3.count).to eq 3
+    expect(result_2.count).to eq 3
+    expect(result_3.count).to eq 4
 
   end
 
@@ -162,8 +162,8 @@ describe RpsGame::MatchesRepo do
       'player_two_move' => 'scissors'
     }
     RpsGame::MatchesRepo.player_move(db, game_info, round_data)
-    winner = db.exec("SELECT winner FROM matches WHERE hash = $1", [game_hash]).first['winner'].to_i
-    expect(winner).to eq @user_id_1
+    winner = db.exec("SELECT winner FROM matches WHERE hash = $1", [game_hash]).entries.pop
+    expect(winner['winner'].to_i).to eq @user_id_1
   end
 
   it "correctly returns the current score of a game" do
