@@ -13,6 +13,7 @@ module RpsGame
           'player_id' => player_id,
           'score' => score
         })
+      score
     end
 
 		def self.save(db, match_data)
