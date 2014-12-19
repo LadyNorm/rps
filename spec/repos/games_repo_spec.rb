@@ -60,6 +60,15 @@ describe RpsGame::GamesRepo do
     expect(result.count).to eq 1
     expect(result[0]["score"]).to eq "3 - 0"
     expect(result[0]["winner"]).to eq @user_id_1.to_s
+  end
 
+  it "correctly calculates player score" do
+    player_1_score = RpsGame::GamesRepo.calculate_score(db, @user_id_1)
+    player_2_score = RpsGame::GamesRepo.calculate_score(db, @user_id_2)
+
+    binding.pry
+
+    expect(player_1_score).to eq 1
+    expect(player_2_score).to eq -1
   end
 end
