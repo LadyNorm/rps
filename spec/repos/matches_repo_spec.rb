@@ -153,7 +153,7 @@ describe RpsGame::MatchesRepo do
 
   end
 
-  it "logs player moves in matches and correctly determines a winner" do
+  it "logs player moves and correctly determines a winner" do
     expect(user_count(db)).to eq 2
     game_info = RpsGame::MatchesRepo.create_game(db, @players_info)
     game_hash = game_info['game_hash']
