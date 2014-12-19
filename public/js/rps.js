@@ -367,7 +367,7 @@ function play(gameHash)
 	footerButtons.append(submit)
 	footerButtons.append(cancel)
 	
-	view.modal("YAY", "choices", false, "footer")
+	view.modal("YAY", "<ul><img id='rock' src='../img/rock.jpg' width='200px' height='200px' /><img id='paper' src='../img/paper.jpg'  width='200px' height='200px' /><img id='scissors' src='../img/scissors.jpg' width='200px' height='200px' /></ul>", false, "footer")
 }
 function online_players()
 {
