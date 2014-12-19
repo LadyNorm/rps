@@ -52,7 +52,16 @@ describe RpsGame::MatchesRepo do
   it "returns opponent name" do
     game_info = RpsGame::MatchesRepo.create_game(db, @players_info)
     game_hash = game_info['game_hash']
-    result = RpsGame::MatchesRepo.opponent_name(db, game_hash)
+    game_data_1 = {
+      'hash' => game_hash,
+      'player_id' => @user_id_1
+    }
+    game_data_2 = {
+      'hash' => game_hash,
+      'player_id' => @user_id_2
+    }
+    result_1 = RpsGame::MatchesRepo.opponent_name(db, game_data_1)
+    result_2 = RpsGame::MatchesRepo.opponent_name(db, game_data_2)
     binding.pry
     expect(game_hash).to be_a Hash
   end
