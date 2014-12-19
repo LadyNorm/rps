@@ -14,12 +14,12 @@ module RpsGame
 
     def self.create_game(db, players_info)
       game_hash = SecureRandom.hex(16)
+      db.exec('INSERT INTO matches (hash, player_one_id, player_two_id) VALUES ($1, $2, $3)', [game_hash, players_info['player_one_id'], players_info['player_two_id']])
       {
         'game_hash' => game_hash,
         'player_one_id' => players_info['player_one_id'],
         'player_two_id' => players_info['player_two_id']
       }
-      # db.exec('INSERT INTO matches (hash, player_one_id, player_two_id) VALUES ($1, $2, $3) RETURNING hash', [game_hash, players_info['player_one_id'], players_info['player_two_id']])
     end
 
     def self.player_move(db, game_info, round_data)
