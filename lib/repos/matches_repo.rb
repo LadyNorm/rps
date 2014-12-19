@@ -4,6 +4,10 @@ module RpsGame
       db.exec('SELECT * FROM matches').entries
     end
 
+    def self.matches_by_player(db, player_id)
+      db.exec('SELECT * FROM matches WHERE player_one_id = $1 OR player_two_id = $1', [player_id])
+    end
+
     def self.matches_for_game(db, game_hash)
       db.exec('SELECT * FROM matches WHERE hash = $1', [game_hash]).entries
     end
