@@ -49,6 +49,14 @@ describe RpsGame::MatchesRepo do
     expect(game_info['player_two_id']).to eq @user_id_2
   end
 
+  it "returns opponent name" do
+    game_info = RpsGame::MatchesRepo.create_game(db, @players_info)
+    game_hash = game_info['game_hash']
+    result = RpsGame::MatchesRepo.opponent_name(db, game_hash)
+    binding.pry
+    expect(game_hash).to be_a Hash
+  end
+
 
   it "gets all matches" do
     expect(user_count(db)).to eq 2
