@@ -14,7 +14,6 @@ describe RpsGame::SessionsRepo do
   end
 
   it "creates a session and deletes session" do
-    # binding.pry
     expect(session_count(db)).to eq 0
 
     user_data_1 = {
@@ -29,11 +28,7 @@ describe RpsGame::SessionsRepo do
 
     user_id = db.exec(sql, [user_data_1['username'], user_data_1['password']]).first['id'].to_i
 
-    # binding.pry
-
-
     user_data_pre = RpsGame::SessionsRepo.create_session(db, user_id)
-    # binding.pry
     expect(session_count(db)).to eq 1
 
     user_data_2 = {
@@ -42,9 +37,16 @@ describe RpsGame::SessionsRepo do
     }
 
     RpsGame::SessionsRepo.end_session(db, user_data_2)
-    # binding.pry
     expect(session_count(db)).to eq 0
   end
 
+  it "raises an error if user does not exist" do
+    expect(session_count(db)).to eq 0
+    urser_data = {
+      'username' => 'princess',
+      'password' => 'mononoke'
+    }
+    expect{ RpsGame::SessionsRepo.end_session(db, user_data) }.to raise_error
+  end
   
 end

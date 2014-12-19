@@ -61,12 +61,7 @@ describe RpsGame::UsersRepo do
       'username' => 'Alice',
       'password' => 'password123'
     }
-
     RpsGame::UsersRepo.sign_up(db, user_data_1)
-
-  # it "Raises an error if both numbers are not integers" do
-  #   expect{Exercises.ex11('NaN', nil)}.to raise_error
-  # end
 
     user_data_2 = {
       'username' => 'Alice',
