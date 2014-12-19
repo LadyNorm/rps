@@ -343,18 +343,20 @@ function current_games()
   		games = JSON.parse(games)
   		console.table(games)
   		$.each(games, function(i,v){
-  			row = $('<tr>').attr('game-id', v['hash'])
+  			row = $('<tr>').attr('id', 'game-'+v['hash'])
   			row.append($('<td>').text(v['opponent_username'])).append($('<td>').text(v['score'])).append($('<td>').text(v['opponent_score']))
   			$(table).append(row)
-  			$(row).click(function(e){
+  			
+  		})
+  		$('tr', table).click(function(e){
 			tgt = e.currentTarget
+			console.log(tgt)
 			gameHash = $(tgt).attr('id')
-			gameHash = playerId.substring(playerId.indexOf('-')+1, playerId.length)
+			console.log(gameHash)
+			gameHash = gameHash.substring(gameHash.indexOf('-')+1, gameHash.length)
 			
 			play(gameHash)
 			})
-  		})
-
   	}
 	});
 
@@ -364,10 +366,12 @@ function play(gameHash)
 {
 	submit = view.buttons.template({type:'primary', iconName:'user', text:'Submit'})
 	cancel = view.buttons.template({type:'warning', iconName:'remove', text:'Cancel'})
+	footerButtons.empty()
 	footerButtons.append(submit)
 	footerButtons.append(cancel)
-	
-	view.modal("YAY", "choices", false, "footer")
+	choices = "almost done"
+	view.modal("Game", choices, false, footerButtons)
+	$('#Cancel').click(view.closeModal)
 }
 function online_players()
 {
