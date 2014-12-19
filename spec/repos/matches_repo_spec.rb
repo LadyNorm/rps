@@ -62,8 +62,9 @@ describe RpsGame::MatchesRepo do
     }
     result_1 = RpsGame::MatchesRepo.opponent_name(db, game_data_1)
     result_2 = RpsGame::MatchesRepo.opponent_name(db, game_data_2)
-    binding.pry
-    expect(game_hash).to be_a Hash
+
+    expect(result_1['username']).to eq "dora"
+    expect(result_2['username']).to eq "alice"
   end
 
 
