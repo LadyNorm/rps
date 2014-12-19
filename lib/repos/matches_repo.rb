@@ -8,7 +8,7 @@ module RpsGame
       if (db.exec('SELECT * from matches WHERE hash = $1 AND player_one_id = $2', [game_data['hash'], game_data['player_id']]).entries.count > 0)
         db.exec('SELECT username FROM matches m JOIN users u ON u.id = m.player_two_id WHERE hash = $1 AND player_id_one = $2', [game_data['hash'], game_data['player_id']]).entries.first
       else
-        db.exec('SELECT username FROM matches m JOIN users u ON u.id = m.player_two_id WHERE hash = $1 AND player_two_id = $2', [game_data['hash'], game_data['player_id']]).entries.first
+        db.exec('SELECT username FROM matches m JOIN users u ON u.id = m.player_one_id WHERE hash = $1 AND player_two_id = $2', [game_data['hash'], game_data['player_id']]).entries.first
       end
     end
 
