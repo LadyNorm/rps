@@ -41,8 +41,8 @@ function init()
 		//$('#main').css('background-image','url("/img/splash.png")')
 		$('.title').height('50px')
 		//$('.title').height('80%')
-		$('.title').css('background-color','#195E19')
-		$('body').css('background-color','#195E19')
+		$('.title').css('background-color','#308850')
+		$('body').css('background-color','#308850')
 		$('.title').css('color','#FFD700')
 
 
