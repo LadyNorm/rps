@@ -2,6 +2,7 @@ view = {}
 ctrl = {}
 view.buttons = {}
 view.dialog = {}
+ctrl.players = {}
 function init()
 {
 		
@@ -57,10 +58,20 @@ function init()
 
 		view.modal = function(title, content, mandatory, footer)
 		{
-			$(".modal-title").text(title)
+			
 			$(".modal-body").empty()
 			$(".modal-body").append(content)
-
+			if(!mandatory)
+			{
+				$("button.close").show()
+				$(".modal-header").append($('<div>').addClass("modal-title"))
+				blocking = {}
+			}
+			else
+			{
+				$("button.close").hide()
+				blocking = {backdrop:'static'}
+			}
 			if(footer)
 			{
 				$(".modal-footer").empty()
@@ -70,7 +81,9 @@ function init()
 			{
 				$(".modal-footer").empty()
 			}
-			$('#modalDialog').modal({backdrop:'static'})
+
+			$('#modalDialog').modal(blocking)
+			$(".modal-title").text(title)
 			$('#modalDialog').css('opacity', '0.78')
 			$('#modalDialog').mouseenter(function() {
   				$(this).css("opacity",".90")
@@ -154,8 +167,8 @@ function signin()
 		  		{
 		  			response = JSON.parse(response)
 		  			console.log(response)
-				  	console.log("Signed In", response["sessionId"])
-				  	ctrl.sessionId = response["sessionId"]
+				  	console.log("Signed In", response["session_id"])
+				  	ctrl.sessionId = response["session_id"]
 				  	ctrl.userId = response["user_id"]
 				  	localStorage.setItem("sessionId", ctrl.sessionId)
 				  	localStorage.setItem("userId", ctrl.userId)
@@ -260,12 +273,11 @@ function startSession()
 		playerId = playerId.substring(playerId.indexOf('-')+1, playerId.length)
 		
 		if (playerId != parseInt(localStorage.getItem('userId')))
-			console.log(playerId)
+			playerInfo(playerId)
+		})
 	})
 
-	})
-	
-	
+
 	
 }
 
@@ -280,4 +292,51 @@ function endSession()
 
 	
 }
+
+function playerInfo(playerId)
+{
+	//some get statement to get player info
+	jQuery.get('/info/'+playerId, null, function(response){
+		footerButtons = $('<div>')
+		
+		challengeb = view.buttons.template({type:'primary', iconName:'user', text:'Challenge'})
+		cancel = view.buttons.template({type:'warning', iconName:'remove', text:'Close'})
+		footerButtons.append(challengeb)
+		footerButtons.append(cancel)
+		view.modal("Player Info:", response, false, footerButtons)
+		$('#Close').click(view.closeModal)
+
+		$('#Challenge').click(function(){
+
+			challenge(playerId)
+		})
+	})
 	
+}
+
+function challenge(playerId)
+{
+	view.closeModal()
+	data = {player_one_id:ctrl.userId,
+		player_two_id:playerId}
+
+	$.ajax({
+  	type: "POST",
+  	url: '/new_game',
+  	data: data,
+  	success: function(x){console.log(x)}
+	});
+
+
+
+
+
+}
+
+function current_games()
+{
+	jQuery.get('/new_game'+ctrl.userId, null, function(games){
+		console.log("games "+games)
+	})
+
+}

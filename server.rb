@@ -57,3 +57,26 @@ end
 get '/online' do
 	JSON.generate(RpsGame::UsersRepo.online_users(@db).to_a)
 end
+
+get '/standings' do
+	JSON.generate(RpsGame::UsersRepo.standings(@db).to_a)
+end
+
+get '/currentGames/:player_id' do
+	JSON.generate(RpsGame::MatchesRepo.matches_by_player(@db, params[:player_id]).to_a)
+end
+
+get '/info/:player_id' do
+	
+
+	JSON.generate(RpsGame::GamesRepo.history(@db, params[:player_id]).to_a)
+end
+
+post '/new_game' do
+	players_info = {}
+	players_info['player_one_id'] = params[:player_one_id]
+	players_info['player_two_id'] = params[:player_two_id]
+	params[:user2_id]
+	JSON.generate(RpsGame::MatchesRepo.create_game(@db, players_info))
+
+end
