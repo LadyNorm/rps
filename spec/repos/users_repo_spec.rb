@@ -157,4 +157,26 @@ describe RpsGame::UsersRepo do
     expect(result[2]['username']).to eq "tie"
     expect(result[3]['username']).to eq "Bob"
   end
+
+  it "updates score from nil" do
+    user_data = {
+      'username' => 'Alice',
+      'password' => 'password123'
+    }
+    RpsGame::UsersRepo.sign_up(db, user_data)
+    user_id = RpsGame::UsersRepo.get_id(db, user_data['username'])
+    player_data = {
+      'score' => 1,
+      'player_id' => user_id
+    }
+    RpsGame::UsersRepo.update_score(db, player_data)
+    score = db.exec("SELECT score FROM users").entries
+
+    expect(score[0]['score']).to eq "1"
+
+  end
 end
+
+#     def self.update_score(db, player_data)
+    #   db.exec('UPDATE users SET score = $1 WHERE id = $2', [player_data['score'], player_data['player_id']])
+    # end
