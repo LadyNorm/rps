@@ -63,7 +63,16 @@ get '/standings' do
 end
 
 post '/current_games' do
-	JSON.generate(RpsGame::MatchesRepo.matches_by_player(@db, params[:player_id]))
+	games = RpsGame::MatchesRepo.matches_by_player(@db, params[:player_id])
+
+	games.each do |game|
+		game['opponent_username'] = RpsGame::MatchesRepo.opponent_name(@db, {'hash' => game["hash"], 'player_id' => params[:player_id]})['username']
+		scores = RpsGame::MatchesRepo.scoreboard(@db, {'game_hash'=> game["hash"], 'player_one_id'=> params[:player_id], 'player_two_id'=> RpsGame::UsersRepo.get_id(@db, game['opponent_username'])})
+		game['score'] = scores['player_one_score']
+		game['opponent_score'] = scores['player_two_score']
+	end
+
+	JSON.generate(games)
 end
 
 get '/info/:player_id' do

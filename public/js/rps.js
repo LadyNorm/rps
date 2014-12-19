@@ -249,9 +249,17 @@ function startSession()
 	view.onlinePlayers = $('<div>').attr('id', 'onlinePlayers')
 
 	view.currentGames = $('<div>').attr('id', 'currentGames')
-	columns = ["Opponent", "Score", "Opponent's Score"]
-	$(view.currentGames).append($('<table>').append())
-	$
+	$(view.currentGames).width(500)
+	columns = ["With", "Score", "Opponent's Score"]
+	head = $('<thead>')
+	table = $('<table>').addClass('table table-bordered table-hover table-condensed')
+	$(table).append(head)
+	$.each(columns, function(i,v){
+		$(head).append($('<th>').text(v))
+	})
+
+	$(view.currentGames).append(table)
+	$('#main').append(view.currentGames)
 	$('#main').append(view.onlinePlayers)
 	$('#main').append(view.currentGames)
 	$(view.onlinePlayers).css('float', 'right')
@@ -262,9 +270,12 @@ function startSession()
 	$($table).attr('id', 'onlinePlayers')
 	$($table).css('margin-left', '2px')
 	$($table).css('margin-right', '2px')
+	
+	$('<dib>')
+
+
 	online_players()
 	current_games()
-	
 }
 
 function endSession()
@@ -321,18 +332,43 @@ function challenge(playerId)
 
 function current_games()
 {
+	table = $('table', view.currentGames)
+	table.css("background-color", 'white')
 	data = {player_id: ctrl.userId}
 	$.ajax({
   	type: "POST",
   	url: '/current_games',
   	data: data,
-  	success: function(x){
-
+  	success: function(games){
+  		games = JSON.parse(games)
+  		console.table(games)
+  		$.each(games, function(i,v){
+  			row = $('<tr>').attr('game-id', v['hash'])
+  			row.append($('<td>').text(v['opponent_username'])).append($('<td>').text(v['score'])).append($('<td>').text(v['opponent_score']))
+  			$(table).append(row)
+  			$(row).click(function(e){
+			tgt = e.currentTarget
+			gameHash = $(tgt).attr('id')
+			gameHash = playerId.substring(playerId.indexOf('-')+1, playerId.length)
+			
+			play(gameHash)
+			})
+  		})
 
   	}
 	});
-}
 
+
+}
+function play(gameHash)
+{
+	submit = view.buttons.template({type:'primary', iconName:'user', text:'Submit'})
+	cancel = view.buttons.template({type:'warning', iconName:'remove', text:'Cancel'})
+	footerButtons.append(submit)
+	footerButtons.append(cancel)
+	
+	view.modal("YAY", "choices", false, "footer")
+}
 function online_players()
 {
 	jQuery.get('/online', null, function(players){
